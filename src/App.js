@@ -1,25 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useRef, useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import Favourites from "./components/Favourites";
+import Footer from "./components/Footer";
+import Home from "./components/Home";
+import Navbar from "./components/Navbar";
+import NotFound from "./components/NotFound";
 
-function App() {
+const App = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const inputField = useRef(null);
+
+  const searchHandeler = (e) => {
+    e.preventDefault();
+
+    console.log(searchQuery);
+
+    getData(searchQuery);
+
+    setSearchQuery("");
+    inputField.current.blur();
+  };
+  const getData = async (searchQuery) => {
+    const res = await fetch(
+      `https://forkify-api.herokuapp.com/api/v2/recipes?search=/${searchQuery}`
+    );
+    const data = await res.json();
+    console.log(data);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="app min-h-screen bg-rose-50 text-gray-600 text-lg">
+        <Navbar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          inputField={inputField}
+          searchHandler={(e) => searchHandeler}
+        />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/favprotes" element={<Favourites />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+      <Footer />
+    </>
   );
-}
+};
 
 export default App;
