@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-
 const Recipe = ({ recipe }) => {
   return (
     <div className="recipe w-80 overflow-hidden bg-white/75 rounded-2xl shadow-xl p-5 shadow-rose-100 border-2 border-white flex flex-col gap-5">
